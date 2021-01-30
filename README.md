@@ -14,7 +14,7 @@ If you are interested in contributing to this project, feel free to open a issue
 ## Installation
 
 ```
-go get -u github.com/ao-concepts/core
+go get -u github.com/ao-concepts/storage
 ```
 
 ## Storage
