@@ -1,7 +1,7 @@
 # ao-concepts storage module
 
 ![CI](https://github.com/ao-concepts/storage/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/ao-concepts/storage/branch/master/graph/badge.svg?token=AQVUZTRGQS)](https://codecov.io/gh/ao-concepts/storage)
+[![codecov](https://codecov.io/gh/ao-concepts/storage/branch/main/graph/badge.svg?token=AQVUZTRGQS)](https://codecov.io/gh/ao-concepts/storage)
 
 This module provides some useful helpers for efficient work with [gorm.io/gorm](https://gorm.io/gorm).
 
