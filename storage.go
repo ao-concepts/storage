@@ -2,7 +2,6 @@ package storage
 
 import (
 	"fmt"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -12,15 +11,26 @@ type Controller struct {
 	db *gorm.DB
 }
 
+type Config struct {
+	MaxOpenConnections int
+	MaxIdleConnections int
+}
+
 // New storage controller consructor.
 // Pass nil to `log` to use the default logger of gorm.
 // default settings:
-//    * SetMaxIdleConns: 10
-// 	  * SetMaxOpenConns: 100
-// 	  * SetConnMaxLifetime: 1h
-func New(dialector gorm.Dialector, log Logger) (c *Controller, err error) {
+//    * SetMaxIdleConns: 0 = unlimited
+// 	  * SetMaxOpenConns: 0 = unlimited
+func New(dialector gorm.Dialector, config *Config, log Logger) (c *Controller, err error) {
 	if dialector == nil {
 		return nil, fmt.Errorf("Cannot use a storage controller without a dialector")
+	}
+
+	if config == nil {
+		config = &Config{
+			MaxOpenConnections: 0,
+			MaxIdleConnections: 0,
+		}
 	}
 
 	cfg := &gorm.Config{}
@@ -38,9 +48,8 @@ func New(dialector gorm.Dialector, log Logger) (c *Controller, err error) {
 		return nil, err
 	}
 
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetMaxOpenConns(100)
-	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetMaxIdleConns(config.MaxIdleConnections)
+	sqlDB.SetMaxOpenConns(config.MaxOpenConnections)
 
 	return &Controller{
 		db: db,

@@ -43,31 +43,31 @@ func TestNew(t *testing.T) {
 	assert := assert.New(t)
 
 	// missing dialector
-	_, err := storage.New(nil, nil)
+	_, err := storage.New(nil, nil, nil)
 	assert.NotNil(err)
 
 	// missing logger
-	_, err = storage.New(sqlite.Open(":memory:"), nil)
+	_, err = storage.New(sqlite.Open(":memory:"), nil, nil)
 	assert.Nil(err)
 
 	// custom logger
-	_, err = storage.New(sqlite.Open(":memory:"), &testLogger{})
+	_, err = storage.New(sqlite.Open(":memory:"), nil, &testLogger{})
 	assert.Nil(err)
 
 	// simple
-	c, err := storage.New(sqlite.Open(":memory:"), nil)
+	c, err := storage.New(sqlite.Open(":memory:"), nil, nil)
 	assert.Nil(err)
 	assert.NotNil(c)
 
 	// wrong connections
-	_, err = storage.New(mysql.Open("not-a-connection-string"), nil)
+	_, err = storage.New(mysql.Open("not-a-connection-string"), nil, nil)
 	assert.NotNil(err)
 }
 
 func TestController_Gorm(t *testing.T) {
 	assert := assert.New(t)
 
-	c, err := storage.New(sqlite.Open(":memory:"), nil)
+	c, err := storage.New(sqlite.Open(":memory:"), nil, nil)
 	assert.Nil(err)
 	assert.NotNil(c.Gorm())
 }

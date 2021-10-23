@@ -1,6 +1,7 @@
 package storage_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/ao-concepts/storage"
@@ -63,8 +64,12 @@ func checkLen(len int, tx *storage.Transaction, assert *assert.Assertions) {
 }
 
 func createMockStorageController() *storage.Controller {
-	c, _ := storage.New(sqlite.Open(":memory:"), nil)
-	c.Gorm().AutoMigrate(&entity{})
+	cfg := &storage.Config{
+		MaxOpenConnections: 1,
+		MaxIdleConnections: 1,
+	}
+	c, _ := storage.New(sqlite.Open(":memory:"), cfg, nil)
+	fmt.Println(c.Gorm().AutoMigrate(&entity{}))
 	return c
 }
 

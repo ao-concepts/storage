@@ -36,7 +36,7 @@ test-race:
 	go test ./... -race -count=1
 
 cover:
-	go test ./... -coverprofile=coverage.out -covermode=atomic
+	go test ./... -coverprofile=coverage.out -covermode=atomic -count=1 -timeout 25s
 	go tool cover -html=coverage.out
 	go tool cover -func coverage.out | grep total | awk '{print substr($$3, 1, length($$3)-1)}'
 	rm coverage.out
