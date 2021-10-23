@@ -7,8 +7,6 @@ This module provides some useful helpers for efficient work with [gorm.io/gorm](
 
 ## Information
 
-The ao-concepts ecosystem is still under active development and therefore the API of this module may have breaking changes until there is a first stable release.
-
 If you are interested in contributing to this project, feel free to open a issue to discus a new feature, enhancement or improvement. If you found a bug or security vulnerability in this package, please start a issue, or open a PR against `master`.
 
 ## Installation
@@ -25,13 +23,13 @@ The log parameter is optional. You cann pass a custom logger there.
 
 You can use the `Controller` to start transactions.
 There is also a `UseTransaction` function that can be used to wrap a
-function that should be executed within a transaction. 
+function that should be executed within a transaction.
 The transaction will be rolled back if the error returned is not nil.
 
 ```go
 dialector := sqlite.Open(":memory:")
 
-c := storage.New(dialector, nil)
+c := storage.New(dialector, nil, nil)
 ```
 
 ## Repositories
@@ -58,11 +56,11 @@ func (r *UserRepository) GetAll(tx *storage.Transaction) (users []User, err erro
 }
 ```
 
-## Used packages 
+## Used packages
 
 This project uses some really great packages. Please make sure to check them out!
 
-| Package                                                                              | Usage                             |
-| ------------------------------------------------------------------------------------ | --------------------------------- |
-| [github.com/stretchr/testify](https://github.com/stretchr/testify)                   | Testing                           |
-| [gorm.io/gorm](gorm.io/gorm)                                                         | Database access                   |
+| Package                                                            | Usage           |
+| ------------------------------------------------------------------ | --------------- |
+| [github.com/stretchr/testify](https://github.com/stretchr/testify) | Testing         |
+| [gorm.io/gorm](gorm.io/gorm)                                       | Database access |
