@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -12,33 +12,40 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Set up Go 1.x
+      - name: set up Go 1.16
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.15
-          
-      - name: Check out code into the Go module directory
+          go-version: ^1.16
+
+      - name: check out code
         uses: actions/checkout@v2
-      
-      - name: Get dependencies
-        run: go get -v -t -d ./...
-      
+
+      - name: restore mod cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: get dependencies
+        run: go mod download
+
       - name: vet
         run: make vet
 
       - name: fmt-check
         run: make fmt-check
 
-      - name: test
-        run: make test
+      - name: detect data races
+        run: go test `go list ./... | grep -v test` -race -count=1
 
-      - name: test-race
-        run: make test-race
+      - name: execute tests
+        run: go test `go list ./... | grep -v test` -coverprofile=coverage.txt -covermode=atomic -count=1 -timeout 60s
 
-      - name: coverage
-        run: go test ./... -coverprofile=coverage.txt -covermode=atomic
-
-      - name: upload coverage
+      - name: upload code coverage to codecov.io
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
