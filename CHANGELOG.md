@@ -1,3 +1,7 @@
+# 1.1.0
+
+- (feature) Configure `SkipDefaultTransaction`
+
 # 1.0.0
 
 - (feature) Add configuration

@@ -12,8 +12,9 @@ type Controller struct {
 }
 
 type Config struct {
-	MaxOpenConnections int
-	MaxIdleConnections int
+	MaxOpenConnections     int
+	MaxIdleConnections     int
+	SkipDefaultTransaction bool
 }
 
 // New storage controller consructor.
@@ -28,8 +29,9 @@ func New(dialector gorm.Dialector, config *Config, log Logger) (c *Controller, e
 
 	if config == nil {
 		config = &Config{
-			MaxOpenConnections: 0,
-			MaxIdleConnections: 0,
+			MaxOpenConnections:     0,
+			MaxIdleConnections:     0,
+			SkipDefaultTransaction: true,
 		}
 	}
 
@@ -42,6 +44,8 @@ func New(dialector gorm.Dialector, config *Config, log Logger) (c *Controller, e
 	if err != nil {
 		return nil, err
 	}
+
+	db.SkipDefaultTransaction = config.SkipDefaultTransaction
 
 	sqlDB, err := db.DB()
 	if err != nil {
